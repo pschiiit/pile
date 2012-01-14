@@ -35,6 +35,6 @@ $app->use_middleware('PileCommonLogger', new PileFileLogger('basic.log'));
 //                                'root' => 'public' ));
 $app->run(new BasicApp());
 
-$server = new PileStandardPHPHandler();
+$server = new PileStdHandler();
 $server->run($app, array( 'display_errors'   => 1, 
                           'register_globals' => 1   ));
