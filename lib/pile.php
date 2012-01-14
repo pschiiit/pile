@@ -8,14 +8,14 @@
 # 
 # TODO: virer les interfaces et type hinting pour la version finale
 
-// interface PhpileIApp
+// interface PileIApp
 // {
 //   public function __construct(self $app);
 //   public function call(array $env);
 // }
 
 # Cf rack.php, qui est assez intéressant
-class PhpileStandardPHPHandler
+class PileStandardPHPHandler
 {
   public $app;
   
@@ -219,7 +219,7 @@ class PhpileStandardPHPHandler
 # limonade adapter
 #
 # ! pas sûr que ce soit utile
-class PhpileLimonadeAdapter
+class PileLimonadeAdapter
 {
   private $app;
   
@@ -235,7 +235,7 @@ class PhpileLimonadeAdapter
 }
 
 # Builder
-class PhpileBuilder
+class PileBuilder
 {
   private $_app;
   private $_apps_stack;
@@ -304,7 +304,7 @@ class PhpileBuilder
   }
 }
 
-class PhpileCommonLogger
+class PileCommonLogger
 {
   public function __construct($app, $logger=null)
   {
@@ -337,7 +337,7 @@ class PhpileCommonLogger
   }
 }
 
-class PhpileFileLogger
+class PileFileLogger
 {
   public function __construct($file_path)
   {
@@ -350,7 +350,7 @@ class PhpileFileLogger
   }
 }
 
-class PhpileShowExceptions
+class PileShowExceptions
 {
   
 }

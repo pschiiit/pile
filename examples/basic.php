@@ -26,15 +26,15 @@ class BasicApp
   }
 }
 
-require_once '../lib/phpile.php';
+require_once '../lib/pile.php';
 
-$app = new PhpileBuilder();
-$app->use_middleware('PhpileCommonLogger', new PhpileFileLogger('basic.log'));
-// $app->use_middleware('PhpileShowExceptions');
-// $app->use_middleware('PhpileStatic', array( 'urls' => array("/css", "/images"), 
+$app = new PileBuilder();
+$app->use_middleware('PileCommonLogger', new PileFileLogger('basic.log'));
+// $app->use_middleware('PileShowExceptions');
+// $app->use_middleware('PileStatic', array( 'urls' => array("/css", "/images"), 
 //                                'root' => 'public' ));
 $app->run(new BasicApp());
 
-$server = new PhpileStandardPHPHandler();
+$server = new PileStandardPHPHandler();
 $server->run($app, array( 'display_errors'   => 1, 
-                          'register_globals' => 0   ));
+                          'register_globals' => 1   ));
