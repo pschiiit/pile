@@ -203,7 +203,7 @@ class PhpileStandardPHPHandler
   
   public function send_headers($status, $headers)
   {
-    $str = self::http_response_status_code($code);
+    $str = self::http_response_status_code($status);
     header($str);
     foreach($headers as $k=>$v) header("$k: $v");
   }
@@ -328,10 +328,10 @@ class PhpileCommonLogger
     
     $str = date(DATE_ATOM)
          . " "
-         . $env['ENV']["REQUEST_METHOD"]
+         . $env['SERVER']["REQUEST_METHOD"]
          . " "
-         . $env['ENV']["REQUEST_URI"]
-         . (empty($env['ENV']["QUERY_STRING"]) ? "" : "?"+$env['ENV']["QUERY_STRING"]);
+         . $env['SERVER']["REQUEST_URI"]
+         . (empty($env['SERVER']["QUERY_STRING"]) ? "" : "?"+$env['SERVER']["QUERY_STRING"]);
          
     $this->logger->write($str);
   }
