@@ -1,1 +1,6 @@
+.DS_STORE
+.tmproj
+cookiefile
+**/cookiefile
 examples/*.log
+test/config.php
