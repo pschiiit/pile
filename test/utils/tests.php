@@ -19,16 +19,16 @@ require_once dirname(__FILE__)."/assertions.php";
  */
 if(!defined('DS')) define("DS", DIRECTORY_SEPARATOR);
 
-if(!array_key_exists("limonade", $GLOBALS))
-   $GLOBALS["limonade"] = array();
-if(!array_key_exists("test_cases", $GLOBALS["limonade"]))
-   $GLOBALS["limonade"]["test_cases"] = array();
-if(!array_key_exists("test_errors", $GLOBALS["limonade"]))
-   $GLOBALS["limonade"]["test_errors"] = array();
-if(!array_key_exists("test_case_current", $GLOBALS["limonade"]))
-   $GLOBALS["limonade"]["test_case_current"] = NULL;
-if(!array_key_exists("test_suites", $GLOBALS["limonade"]))
-   $GLOBALS["limonade"]["test_suites"] = NULL;
+if(!array_key_exists("pile", $GLOBALS))
+   $GLOBALS["pile"] = array();
+if(!array_key_exists("test_cases", $GLOBALS["pile"]))
+   $GLOBALS["pile"]["test_cases"] = array();
+if(!array_key_exists("test_errors", $GLOBALS["pile"]))
+   $GLOBALS["pile"]["test_errors"] = array();
+if(!array_key_exists("test_case_current", $GLOBALS["pile"]))
+   $GLOBALS["pile"]["test_case_current"] = NULL;
+if(!array_key_exists("test_suites", $GLOBALS["pile"]))
+   $GLOBALS["pile"]["test_suites"] = NULL;
 
 ini_set("display_errors", true);
 error_reporting(E_ALL ^ (E_USER_WARNING | E_NOTICE | E_USER_NOTICE));
@@ -51,7 +51,7 @@ assert_options(ASSERT_CALLBACK, 'test_assert_failure');
  */
 function test_suite($name)
 {
-  $GLOBALS["limonade"]["test_suites"] = $name;
+  $GLOBALS["pile"]["test_suites"] = $name;
   echo test_cli_format("===========================================================\n", 'white');
   echo test_cli_format(">>>> START $name tests suites\n", 'white');
   echo test_cli_format("-----------------------------------------------------------\n", 'white');
@@ -64,13 +64,13 @@ function test_suite($name)
  */
 function end_test_suite()
 {
-  $name         = $GLOBALS["limonade"]["test_suites"];
+  $name         = $GLOBALS["pile"]["test_suites"];
   $failures     = 0;
   $tests        = 0;
   $passed_tests = 0;
   $assertions   = 0;
 
-  foreach($GLOBALS["limonade"]["test_cases"] as $test)
+  foreach($GLOBALS["pile"]["test_cases"] as $test)
   {
     $failures += $test['failures'];
     $assertions += $test['assertions'];
@@ -94,15 +94,15 @@ function test_case($name)
 {
    $name = strtolower($name); // TODO: normalize name
    
-   if(!array_key_exists($name, $GLOBALS["limonade"]["test_cases"]))
+   if(!array_key_exists($name, $GLOBALS["pile"]["test_cases"]))
    {
-      $GLOBALS["limonade"]["test_cases"][$name] = array( 
+      $GLOBALS["pile"]["test_cases"][$name] = array( 
                                                       "name" => $name,
                                                       "assertions" => 0, 
                                                       "failures" => 0,
                                                       "description" => NULL
                                                    );      
-      $GLOBALS["limonade"]["test_case_current"] = $name;
+      $GLOBALS["pile"]["test_case_current"] = $name;
    }
    else
    {
@@ -117,7 +117,7 @@ function test_case($name)
  */
 function end_test_case()
 {
-   $name = $GLOBALS["limonade"]["test_case_current"];
+   $name = $GLOBALS["pile"]["test_case_current"];
    echo "## ".strtoupper($name)."\n";
       
    $desc = test_case_describe();
@@ -130,7 +130,7 @@ function end_test_case()
    
    if(!is_null($name))
    {
-      $test = $GLOBALS["limonade"]["test_cases"][$name];
+      $test = $GLOBALS["pile"]["test_cases"][$name];
       // closing previous test
       echo "\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
       echo $test['failures'] > 0 ? test_cli_format("|FAILED!|", "red") : test_cli_format("|PASSED|", "green");
@@ -140,7 +140,7 @@ function end_test_case()
       
       echo "-----------------------------------------------------------\n";
    }
-   $GLOBALS["limonade"]["test_case_current"] = null;
+   $GLOBALS["pile"]["test_case_current"] = null;
 }
 
 /**
@@ -171,7 +171,7 @@ function test_case_all_func()
    $functions = get_defined_functions();
    $functions = $functions['user'];
    $tests = array();
-   $name = $GLOBALS["limonade"]["test_case_current"];
+   $name = $GLOBALS["pile"]["test_case_current"];
    while ($func = array_shift($functions)) {
       $regexp = "/^test_{$name}_(.*)$/";
       if(!preg_match($regexp, $func)) continue;
@@ -202,8 +202,8 @@ function test_case_execute_current()
 
 function &test_case_current()
 {
-   $name = $GLOBALS["limonade"]["test_case_current"];
-   return $GLOBALS["limonade"]["test_cases"][$name];
+   $name = $GLOBALS["pile"]["test_case_current"];
+   return $GLOBALS["pile"]["test_cases"][$name];
 }
 
 
@@ -224,8 +224,8 @@ function test_before_assert_func_name()
 
 function test_run_assertion()
 {
-   $name = $GLOBALS["limonade"]["test_case_current"];
-   $GLOBALS["limonade"]["test_cases"][$name]['assertions']++;
+   $name = $GLOBALS["pile"]["test_case_current"];
+   $GLOBALS["pile"]["test_cases"][$name]['assertions']++;
    test_call_func(test_before_assert_func_name());
 }
 
@@ -255,7 +255,7 @@ function test_error_handler($errno, $errstr, $errfile, $errline)
 {
 	if($errno < E_USER_ERROR || $errno > E_USER_NOTICE) 
 	   echo test_cli_format("!!! ERROR", "red") . " [$errno], $errstr in $errfile at line $errline\n";
-	$GLOBALS["limonade"]["test_errors"][] = array($errno, $errstr, $errfile, $errline);
+	$GLOBALS["pile"]["test_errors"][] = array($errno, $errstr, $errfile, $errline);
    return true;
 }
 
@@ -288,8 +288,8 @@ function test_assert_failure($script, $line, $message)
    echo " in script *{$assert_file}* (line {$assert_line}):\n";
    echo "   * assertion: $code\n";
    echo "   * message:   $message\n";
-   $name = $GLOBALS["limonade"]["test_case_current"];
-   $GLOBALS["limonade"]["test_cases"][$name]['failures']++;
+   $name = $GLOBALS["pile"]["test_case_current"];
+   $GLOBALS["pile"]["test_cases"][$name]['failures']++;
 }
 
 function test_cli_format($text, $format) {
