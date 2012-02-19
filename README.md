@@ -1,6 +1,6 @@
 # Pile
 
-This project is an attempt to provide au [Rack](http://rack.rubyforge.org/)-like
+This project is an attempt to provide a [Rack](http://rack.rubyforge.org/)-like
  unified API for PHP web apps. Because of the nature of PHP, its goal
 will be focused on the middleware stack rather than on the webserver
 interface.

@@ -1,6 +1,6 @@
 <?php
 
-require_once $libdir . DS . 'pile' . DS . 'Stack.php';
+require_once $libdir . DS . 'Pile' . DS . 'Stack.php';
 
 test_case("Stack");
   test_case_describe("Pile_Stack unit tests");

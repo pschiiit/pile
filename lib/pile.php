@@ -2,8 +2,9 @@
 
 # load all Pile components
 #
-include_once dirname(__FILE__).'/pile/builder.php';
-include_once dirname(__FILE__).'/pile/commonlogger.php';
-include_once dirname(__FILE__).'/pile/filelogger.php';
-include_once dirname(__FILE__).'/pile/showeceptions.php';
-include_once dirname(__FILE__).'/pile/stdhandler.php';
+require_once dirname(__FILE__).'/Pile/Builder.php';
+require_once dirname(__FILE__).'/Pile/Http.php';
+require_once dirname(__FILE__).'/Pile/Stack.php';
+require_once dirname(__FILE__).'/Pile/StdHandler.php';
+
+require_once dirname(__FILE__).'/Pile/middlewares.php';
