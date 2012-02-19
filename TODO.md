@@ -1,6 +1,5 @@
 # TODO
 
-
 ## Rack port
 
 Some parts of Rack are interesting to port to PHP.
@@ -10,8 +9,6 @@ Some parts of Rack are interesting to port to PHP.
 #### Request
 
 * `request.rb` : clean wrapper around HTTP request
-* `methodoverride.rb` : allow use of HTTP methods non supported by browser throught a \_method param
-* `head.rb` : force HEAD request to return empty body
 
 #### Response headers
 
@@ -41,7 +38,6 @@ Some parts of Rack are interesting to port to PHP.
 
 ### Monitoring
 
-* `runtime.rb` : simple response time tracking
 * `commonlogger.rb` : Log every request
 
 ### Other
@@ -57,11 +53,7 @@ Some parts of Rack::Utils can be valuable :
 
 ## Pile specific development
 
-Most of the logic in StdHandler can be separated into middlewares. 
-
-### Middleware stack managment
-
-* Add methods to insert / remove / swap middlewares in the stack
+Most of the logic in StdHandler can be separated into middlewares.
 
 ### HTTP Spec conforming
 
@@ -70,7 +62,6 @@ Most of the logic in StdHandler can be separated into middlewares.
 ### Monitoring
 
 * Define error handler and exit method to log errors to a file
-* Add X-header to response to track memory usage
 
 ### Utility
 
