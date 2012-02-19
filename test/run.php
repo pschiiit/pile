@@ -107,4 +107,4 @@ OUTPUT;
   define('TESTS_DOC_ROOT', $doc_root);
 }
 
-require $basedir.'phpile_test.php';
+require $basedir.'pile_test.php';
