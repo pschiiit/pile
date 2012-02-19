@@ -307,7 +307,7 @@ function test_cli_format($text, $format) {
     );
 
     if (array_key_exists($format, $formats)) $format = $formats[$format];
-    return chr(27) . "[01;{$format} m{$text}" . chr(27) . "[00m";
+    return chr(27) . "[01;{$format}m{$text}" . chr(27) . "[00m";
 }
 
 /**
@@ -328,11 +328,15 @@ function test_request($url, $method="GET", $include_header=false) {
       return assert('false; //'.$message);
     }
     
-    $curl = curl_init($url);
+    $curl = curl_init();
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($curl, CURLOPT_HEADER, $include_header);
     curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+    curl_setopt($curl, CURLOPT_URL, $url);
     $response = curl_exec($curl);
+    if (false === $response) {
+      echo curl_error($curl);
+    }
     curl_close($curl);
 
     return $response;
