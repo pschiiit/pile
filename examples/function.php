@@ -7,7 +7,7 @@ function single_function_app($env)
     array(),
     "<!DOCTYPE html>
     <html>
-      <head><title>Single function application</title></head>
+      <head><title>Pile - Function example</title></head>
       <body><p>Generated on " . date('Y-m-d') ." at " . date('H:i') ."</p></body>
     </html>"
     );
