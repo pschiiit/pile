@@ -14,12 +14,17 @@ class Pile_Stack implements Iterator, ArrayAccess
     }
   }
   
+  public function dump()
+  {
+    return $this->_stack;
+  }
+  
   public function reset()
   {
     $this->_stack = array(
       # TODO: uncomment when middlewares are ready
-      # 'head'            => 'pile_middleware_head',
-      # 'method_override' => 'pile_middleware_method_override',
+      'head'            => 'pile_middleware_head',
+      'method_override' => 'pile_middleware_method_override',
       );
   }
   
@@ -82,39 +87,35 @@ class Pile_Stack implements Iterator, ArrayAccess
   
   protected function _insert($position, $offset, $middleware, $name = null)
   {
-    $names = array_keys($this->_stack);
+    $names     = array_keys($this->_stack);
     $callables = array_values($this->_stack);
-    
-    $pos = array_search($offset, $names);
-    
-    if ($position == Pile_Stack::BEFORE) {
-      $pos--;
-      $pos = $pos >= 0 ? $pos : false;
-    }
+    $pos       = array_search($offset, $names);
     
     if (false == $pos AND $position == Pile_Stack::BEFORE) {
       return $this->unshift($middleware, $name);
     }
-    if ( ((count($this->_stack) - 1) == $pos || false === $pos) && $position == Pile_Stack::AFTER) {
+    
+    if ( (count($this->_stack) == $pos || false === $pos) && $position == Pile_Stack::AFTER) {
       return $this->push($middleware, $name);
+    }
+    
+    if ($position == Pile_Stack::AFTER) {
+      $pos++;
     }
     
     list($name, $callable) = $this->_normalize_arguments($middleware, $name);
     
-    $names_after = array_splice($names, $pos);
-    $callables_after = array_splice($callables, $pos);
+    $before = ($pos != 0 ? array_combine(array_slice($names, 0, $pos), array_slice($callables, 0, $pos)) : array());
+    $after  = ($pos != count($this->_stack) ? array_combine(array_slice($names, $pos), array_slice($callables, $pos)) : array());
     
-    $names[] = $name;
-    $callables[] = $callable;
-    
-    $this->_stack = array_merge(array_combine($names, $callables), array_combine($names_after, $callables_after));
+    $this->_stack = $before + array($name => $callable) + $after;
   }
   
   protected function _normalize_arguments($middleware, $name = null)
   {
     $callable = $this->_normalize_to_callable($middleware);
     if (null == $name) {
-      $name = $this->_create_name($callable);
+      $name = $this->_name($callable);
     }
     return array($name, $callable);
   }
@@ -142,9 +143,9 @@ class Pile_Stack implements Iterator, ArrayAccess
     if (is_array($callable)) {
       list($object, $method) = $callable;
       if (is_string($object)) {
-        return $object;
+        return sprintf('%s::%s', $object, $method);
       }
-      return get_class($object);
+      return sprintf('%s::%s', get_class($object), $method);
     }
     
     throw new InvalidArgumentException('Unable to build string representation of middleware');
@@ -209,6 +210,6 @@ class Pile_Stack implements Iterator, ArrayAccess
   
   public function valid()
   {
-    return true;
+    return key($this->_stack) !== null;;
   }
 }
